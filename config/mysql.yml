@@ -1,0 +1,6 @@
+---
+host: 'mysql'
+database: 'consumers'
+user: 'root'
+password: ''
+table: consumer_list 
