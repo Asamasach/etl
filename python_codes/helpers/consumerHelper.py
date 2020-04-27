@@ -1,6 +1,6 @@
-from helpers.kafkaHelper import Kafka
-from helpers.mysqlHelper import Mysql
-from helpers.elasticHelper import Elastic
+from kafkaHelper import Kafka
+from mysqlHelper import Mysql
+from elasticHelper import Elastic
 import multiprocessing
 import time
 
@@ -22,23 +22,24 @@ class Consumer():
             all_process=0
             jobs = []
             if self.p:
-                self.p.terminate()
+                for self.p in jobs: 
+                    self.p.terminate()
 
             for consumer in consumers:
                 kafka_worker = []
-                for i in range(int(consumer['process_number'])):
+                for i in range(int(consumer[6])):
                     all_process+=1
                     kafka_worker.append(Kafka(
-                                    topic_name = consumer['topic_name'],
-                                    group_id = consumer['group_id'],
-                                    auto_offset_reset = consumer['auto_offset_reset']
+                                    topic_name = consumer[1],
+                                    group_id = consumer[0],
+                                    auto_offset_reset = consumer[5]
                                     ))
                     
                 for kafka_object in kafka_worker:
                     self.p = multiprocessing.Process(target=self.elasticsearch_instance.post(
                                                                                             kafka_object.consume(),
-                                                                                            consumer['elastic_index'])
-                                                                                            )
+                                                                                            consumer[2]) 
+                                                                                            )  # consumer[2] : consumer['elastic_index']
                     jobs.append(self.p)
                     self.p.start()
                 

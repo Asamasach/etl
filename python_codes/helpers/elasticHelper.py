@@ -1,20 +1,19 @@
 # a calss for elasticsearch
 from elasticsearch import Elasticsearch    
 import yaml
-from helpers.logHelper import Log
+from logHelper import Log
 import unittest
-import io
+import os
 
-
+fileDir = os.path.dirname(os.path.realpath('__file__'))
+config_file_path = os.path.join(fileDir,  "config/elastic.yml")
 
 class Elastic():
 
     def __init__(self):
-        # f=io.open('../config/elastic.yml', 'r',  encoding='utf8')
-        # elastic_conf=f.read()
-        # f.close()
-        with open( r'../config/elastic.yml' ) as elastic_conf:
-            conf = yaml.load(elastic_conf)
+
+        with open(config_file_path) as elastic_conf:
+            conf = yaml.load(elastic_conf, Loader=yaml.FullLoader)
         
         self.es =  Elasticsearch(
                             [str(conf['host'])],
