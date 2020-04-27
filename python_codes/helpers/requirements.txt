@@ -2,4 +2,4 @@ elasticsearch
 pyyaml
 unittest2
 confluent_kafka
-mysql.connector
+mysql-connector-python
