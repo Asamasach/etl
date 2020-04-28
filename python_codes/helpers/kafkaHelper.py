@@ -30,14 +30,15 @@ class Kafka():
             msg = self.c.poll(1.0)
 
             if msg is None:
-                empty = Log("Empty")
-                empty.write("Empty message!","kafka")
-
+        #        empty = Log("Empty")
+        #        empty.write("Empty message!","kafka")
+                print("empty message!")
         #    if msg.error():
         #        err = Log("Error")
         #        err.write(msg.error(),"kafka")
 
         #    print(msg.value().decode('utf-8'))
+            print(msg)
             self.c.commit()
         self.c.close()
         return msg
