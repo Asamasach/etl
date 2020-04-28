@@ -38,25 +38,25 @@ class Elastic():
                                 }
 
             data_message_count += 1  #calculate messages in data 
-            self.post_result = self.es.index(index=index, body=stamped_data)  #add documnets in elasticsearch, in index related
+            self.post_result = self.es.index(index= self.index, body=stamped_data)  #add documnets in elasticsearch, in index related
             if (str(self.post_result['result']) == "created"): 
                 successful_indexed_count += 1  #count number of successful objects sent to elasticsearch
             else:            
                 err = Log("Error")
                 err.write(self.post_result,"elastic") 
-
-            self.es.indices.refresh(index=index) # refresh index
-        try:
-            test_c=unittest.TestCase()
-            test_c.assertEqual(data_message_count, successful_indexed_count)
-        except AssertionError:
-            err = Log('Error') 
-            err.write('%(data_message_count)s are counted, but %(data_message_count)s are sent to elastic','elastic')
-            pass
+                print(str(self.post_result['result']))
+        #    self.es.indices.refresh(index= self.index) # refresh index
+        #try:
+        #    test_c=unittest.TestCase()
+        #    test_c.assertEqual(data_message_count, successful_indexed_count)
+        #except AssertionError:
+        #    err = Log('Error') 
+        #    err.write('%(data_message_count)s are counted, but %(data_message_count)s are sent to elastic','elastic')
+        #    pass
         return data_message_count, successful_indexed_count
     
     def get(self, index):
-        get_result = self.es.get(index="test-index", id=1)
+        get_result = self.es.get(index=index, id=1)
         return(get_result['_source'])
 
 #    def stamp_time(self):

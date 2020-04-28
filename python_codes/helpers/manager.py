@@ -18,7 +18,8 @@ if __name__ == "__main__":
             group_id = groups[i][0]
             consumers_group.append(Consumer(group_id))
             message = "new group_id has been detected!" #  .format(group_id)
-            manager_log.write(message,"Manager")
+            print(message)
+            #manager_log.write(message,"Manager")
         old_consumers = consumers_group
     
     for consumer in consumers_group:

@@ -1,6 +1,7 @@
 from kafkaHelper import Kafka
 from mysqlHelper import Mysql
 from elasticHelper import Elastic
+from logHelper import Log
 import multiprocessing
 import time
 
@@ -12,8 +13,9 @@ class Consumer():
         self.old_consumers = []
         self.p = []
         self.elasticsearch_instance = Elastic()
-
+#        self.log = Log("consumerHelper")
     def consume(self):
+
         consumers = []
         mysql = Mysql()
         consumers = mysql.get_list(group_id = self.consumer_group_id)
@@ -39,7 +41,8 @@ class Consumer():
                                         group_id = consumer[0],
                                         auto_offset_reset = consumer[5]
                                         ))
-                        
+                    print("consumer_id {} is running now".format(consumer[3])) 
+                       
                     for kafka_object in kafka_worker:
                         self.p = multiprocessing.Process(target=self.elasticsearch_instance.post(
                                                                                                 kafka_object.consume(),
@@ -47,11 +50,11 @@ class Consumer():
                                                                                                 )  # consumer[2] : consumer['elastic_index']
                         jobs.append(self.p)
                         self.p.start()
-                    
-                    print(all_process)
+                        self.p.join()
+                    print("number of running process are : {}".format(all_process))
                     self.old_consumers = consumer 
-                    else:
-                        print("consumer is disabled!")
+                else:
+                    self.log.write("consumer_id {} is disabled".format(consumer[3]),"consumer")
         else:
             time.sleep(10)
          

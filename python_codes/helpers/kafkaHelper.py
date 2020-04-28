@@ -24,22 +24,24 @@ class Kafka():
                     'auto.offset.reset': self.auto_offset_reset
                     })
         self.c.subscribe([self.topic_name])
-    
+        print(self.c.list_topics())
+ 
     def consume(self):
-        while self.running_consumer:
-            msg = self.c.poll(1.0)
+        #while self.running_consumer:
+        msg = self.c.poll(10.0)
 
-            if msg is None:
+        if msg is None:
         #        empty = Log("Empty")
         #        empty.write("Empty message!","kafka")
-                print("empty message!")
+            print("empty message!")
+            msg = { 'msg' : "empty" }
         #    if msg.error():
         #        err = Log("Error")
         #        err.write(msg.error(),"kafka")
 
         #    print(msg.value().decode('utf-8'))
-            print(msg)
-            self.c.commit()
+        print("message is : {}".format(msg))#.decode('utf-8')))
+        self.c.commit()
         self.c.close()
         return msg
     
