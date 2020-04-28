@@ -17,6 +17,7 @@ class Consumer():
         consumers = []
         mysql = Mysql()
         consumers = mysql.get_list(group_id = self.consumer_group_id)
+        all_process = 0
         if self.old_consumers != consumers:
 
             all_process=0
@@ -27,6 +28,7 @@ class Consumer():
 
             for consumer in consumers:
                 kafka_worker = []
+                print(consumer)
                 for i in range(int(consumer[6])):
                     all_process+=1
                     kafka_worker.append(Kafka(
@@ -47,7 +49,7 @@ class Consumer():
                 self.old_consumers = consumer 
 
         else:
-            time.sleep(60)
+            time.sleep(10)
          
 
-        return jobs
+        return all_process

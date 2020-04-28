@@ -1,6 +1,6 @@
 ---
-host: 'mysql'
-database: 'consumers'
+host: 'localhost'
+database: consumers
 user: 'root'
-password: ''
-table: consumer_list 
+password: 'ChangeMe'
+table: consumers_list 

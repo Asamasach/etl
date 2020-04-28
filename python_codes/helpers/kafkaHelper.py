@@ -21,9 +21,9 @@ class Kafka():
         self.c = Consumer({
                     'bootstrap.servers': self.conf['bootstrap_servers'],
                     'group.id': self.group_id,
-                    'auto.offset.reset': auto_offset_reset
+                    'auto.offset.reset': self.auto_offset_reset
                     })
-        self.c.subscribe([self.conf['topic_name']])
+        self.c.subscribe([self.topic_name])
     
     def consume(self):
         while self.running_consumer:
@@ -33,11 +33,11 @@ class Kafka():
                 empty = Log("Empty")
                 empty.write("Empty message!","kafka")
 
-            if msg.error():
-                err = Log("Error")
-                err.write(msg.error(),"kafka")
+        #    if msg.error():
+        #        err = Log("Error")
+        #        err.write(msg.error(),"kafka")
 
-            print(msg.value().decode('utf-8'))
+        #    print(msg.value().decode('utf-8'))
             self.c.commit()
         self.c.close()
         return msg

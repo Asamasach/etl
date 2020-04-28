@@ -47,8 +47,8 @@ class Mysql:
                 group_id = 'mysql_helper_group_id',
                 topic_name = '',
                 elastic_index = 'mysql_helper',
-                consumer_name = None,
-                auto_offset_reset = '1',
+                consumer_name = '',
+                auto_offset_reset = 'earliest',
                 process_number = '1',
                 consumer_en = '1'
                 ):
@@ -155,7 +155,7 @@ class Mysql:
                                         elastic_index VARCHAR(255) ,
                                         consumer_id INT AUTO_INCREMENT PRIMARY KEY ,
                                         consumer_name VARCHAR(255) ,
-                                        auto_offset_reset BOOLEAN ,
+                                        auto_offset_reset VARCHAR(255) ,
                                         process_number INT,
                                         consumer_en BOOLEAN 
                                         ) ;"""
