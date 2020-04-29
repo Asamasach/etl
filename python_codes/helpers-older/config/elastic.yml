@@ -1,0 +1,7 @@
+---
+host: localhost
+user: asamasach
+pass: 1qaz!QAZ
+connection_timeout: 30
+max_retries: 10
+retry_on_timeout: 20

@@ -1,6 +1,6 @@
 from kafkaHelper import Kafka
 from mysqlHelper import Mysql
-
+from elasticHelper import Elastic
 from logHelper import Log
 from multiprocessing import Process
 import time
@@ -12,10 +12,9 @@ class Consumer():
 
         self.old_consumers = []
         self.p = []
-        
+        self.elasticsearch_instance = Elastic()
 #        self.log = Log("consumerHelper")
         self.jobs = []
-
     def consume(self):
 
         consumers = []
@@ -38,7 +37,7 @@ class Consumer():
 
                     kafka_worker = []
                     print(consumer)
-                    for _ in range(int(consumer[6])):
+                    for i in range(int(consumer[6])):
                         all_process+=1
                         kafka_worker.append(Kafka(
                                         topic_name = consumer[1],
@@ -48,7 +47,10 @@ class Consumer():
                     print("consumer_id {} is running now".format(consumer[3])) 
                        
                     for kafka_object in kafka_worker:
-                        self.p = Process(target=kafka_object.consume(consumer[2]))   # consumer[2] : consumer['elastic_index']
+                        self.p = Process(target=self.elk_consume(
+                                                                                                kafka_object.consume(),
+                                                                                                consumer[2]) 
+                                                                                                )  # consumer[2] : consumer['elastic_index']
                         self.jobs.append(self.p)
                     print("number of running process are : {}".format(all_process))
                 else:
@@ -62,6 +64,7 @@ class Consumer():
             time.sleep(1)
 
         return all_process
-    # def elk_consume(self, data, index):
-
-        # return None
+    def elk_consume(self, data, index):
+        self.elasticsearch_instance.post(data= data, index= index)
+        print("elk_consume for index : {} and data: {}".format(index, data))
+        return None
