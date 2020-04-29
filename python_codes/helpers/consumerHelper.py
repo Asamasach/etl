@@ -48,7 +48,7 @@ class Consumer():
                     print("consumer_id {} is running now".format(consumer[3])) 
                        
                     for kafka_object in kafka_worker:
-                        self.p = Process(target=kafka_object.consume(consumer[2]))   # consumer[2] : consumer['elastic_index']
+                        self.p = Process(target=kafka_object.consume(consumer[2], consumer[3]))   # consumer[2] : consumer['elastic_index'] # id
                         self.jobs.append(self.p)
                     print("number of running process are : {}".format(all_process))
                 else:

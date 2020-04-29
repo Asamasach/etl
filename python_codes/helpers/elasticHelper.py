@@ -45,7 +45,7 @@ class Elastic():
                 err = Log("Error")
                 err.write(self.post_result,"elastic") 
                 print(str(self.post_result['result']))
-        #    self.es.indices.refresh(index= self.index) # refresh index
+            self.es.indices.refresh(index= self.index) # refresh index
         #try:
         #    test_c=unittest.TestCase()
         #    test_c.assertEqual(data_message_count, successful_indexed_count)
