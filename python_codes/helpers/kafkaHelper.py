@@ -28,8 +28,8 @@ class Kafka():
                     'auto.offset.reset': self.auto_offset_reset
                     })
         self.c.subscribe([self.topic_name])
-        print(self.c.list_topics())
- 
+        print(self.c.list_topics().decode('utf-8'))
+        print("{}th kafka_object has created!".format(self.kafka_id))
     def consume(self, index, consumer_id):
 #        self.batch_size = batch_size
         a = 0
@@ -43,23 +43,13 @@ class Kafka():
 
             if msg is None:
                 a+=1
-        #        empty = Log("Empty")
-        #        empty.write("Empty message!","kafka")
-                print("empty message!")
-#                msg = "empty".encode('utf-8')
-                #if a%10 == 0:
-                #break                
-                
-        #    if msg.error():
-        #        err = Log("Error")
-        #        err.write(msg.error(),"kafka")
 
-        #    print(msg.value().decode('utf-8'))
+                print("empty message!")
+
             else:
                 a+=1
                 msg = msg.value().decode('utf-8')
                 data.append(msg)
-#            print("message is : {}".format(msg))#.decode('utf-8')))
                        
             if a % 10 == 0:
 
@@ -79,12 +69,5 @@ class Kafka():
                 else:
                     self.c.commit()
                     self.running_consumer = True
-            #return msg
 
         return None
-
-
-#    def stop_consume(self):
-#        self.running_consumer = False
-        # time.sleep(10)
-        # self.consume()
