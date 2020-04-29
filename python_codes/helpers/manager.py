@@ -20,8 +20,9 @@ if __name__ == "__main__":
             message = "new group_id has been detected!" #  .format(group_id)
             print(message)
             #manager_log.write(message,"Manager")
-        old_consumers = consumers_group
-    
-    for consumer in consumers_group:
-        consumer.consume()
-        time.sleep(1)
+        old_groups = groups
+
+    while old_groups == groups: 
+        for consumer in consumers_group:
+            consumer.consume()
+           # time.sleep(1)

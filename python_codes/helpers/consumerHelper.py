@@ -2,7 +2,7 @@ from kafkaHelper import Kafka
 from mysqlHelper import Mysql
 from elasticHelper import Elastic
 from logHelper import Log
-import multiprocessing
+from multiprocessing import Process
 import time
 
 class Consumer():
@@ -14,6 +14,7 @@ class Consumer():
         self.p = []
         self.elasticsearch_instance = Elastic()
 #        self.log = Log("consumerHelper")
+        self.jobs = []
     def consume(self):
 
         consumers = []
@@ -24,11 +25,13 @@ class Consumer():
         
 
             all_process=0
-            jobs = []
-            if self.p:
-                for self.p in jobs: 
+#            jobs = []
+            if self.jobs:
+                print("we have processes which going to terminate")
+                for self.p in self.jobs: 
                     self.p.terminate()
-
+            
+                self.jobs = []
             for consumer in consumers:
                 if str(consumer[7]) == '1':
 
@@ -44,19 +47,24 @@ class Consumer():
                     print("consumer_id {} is running now".format(consumer[3])) 
                        
                     for kafka_object in kafka_worker:
-                        self.p = multiprocessing.Process(target=self.elasticsearch_instance.post(
+                        self.p = Process(target=self.elk_consume(
                                                                                                 kafka_object.consume(),
                                                                                                 consumer[2]) 
                                                                                                 )  # consumer[2] : consumer['elastic_index']
-                        jobs.append(self.p)
-                        self.p.start()
-                        self.p.join()
+                        self.jobs.append(self.p)
                     print("number of running process are : {}".format(all_process))
-                    self.old_consumers = consumer 
                 else:
                     self.log.write("consumer_id {} is disabled".format(consumer[3]),"consumer")
+            for self.p in self.jobs:
+                self.p.start()
+                self.p.join()
+
+            self.old_consumers = consumers
         else:
-            time.sleep(10)
-         
+            time.sleep(1)
 
         return all_process
+    def elk_consume(self, data, index):
+        self.elasticsearch_instance.post(data= data, index= index)
+        print("elk_consume for index : {} and data: {}".format(index, data))
+        return None

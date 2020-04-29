@@ -2,6 +2,7 @@ from confluent_kafka import Consumer
 from logHelper import Log
 import yaml
 import os
+import time
 
 fileDir = os.path.dirname(os.path.realpath('__file__'))
 config_file_path = os.path.join(fileDir,  "config/kafka.yml")
@@ -27,23 +28,38 @@ class Kafka():
         print(self.c.list_topics())
  
     def consume(self):
-        #while self.running_consumer:
-        msg = self.c.poll(10.0)
+#        self.batch_size = batch_size
+        while self.running_consumer:
+            a = 0
+            msg = self.c.poll(1.0)
 
-        if msg is None:
+            if msg is None:
+               
         #        empty = Log("Empty")
         #        empty.write("Empty message!","kafka")
-            print("empty message!")
-            msg = { 'msg' : "empty" }
+                print("empty message!")
+                msg = "empty".encode('utf-8')
+                #if a%10 == 0:
+                #break                
+                
         #    if msg.error():
         #        err = Log("Error")
         #        err.write(msg.error(),"kafka")
 
         #    print(msg.value().decode('utf-8'))
-        print("message is : {}".format(msg))#.decode('utf-8')))
-        self.c.commit()
-        self.c.close()
+            else:
+                a+=1
+                msg = msg.value().decode('utf-8')
+            print("message is : {}".format(msg))#.decode('utf-8')))
+            self.c.commit()
+            if a % 10 == 0:
+                self.running_consumer = False
+            #return msg
+#        self.c.close()
         return msg
-    
+        self.consume()
+
     def stop_consume(self):
         self.running_consumer = False
+        time.sleep(10)
+        self.consume()
