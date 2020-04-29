@@ -37,17 +37,10 @@ while True:
                     print(consumer)
                     process_number = 0
                     for _ in range(int(consumer[6])):
-                        process_number +=1
-                        kafka_workers.append(Kafka(
-                                        topic_name = consumer[1],
-                                        group_id = consumer[0],
-                                        auto_offset_reset = consumer[5],
-                                        kafka_id = process_id
-                                        ))
+
                         print("{}th process of consumer_id {} added to jobs".format(process_number, consumer[3])) 
                         process_id+=1
-                
-                    for kafka_worker in kafka_workers:
+
                         # p = Process(target=kafka_worker.consume(consumer[2], consumer[3]))   # consumer[2] : consumer['elastic_index'] # id
                         os.system('nohup /usr/bin/python3 ./kafka-consumer.py {} {} > /dev/null 2> /dev/null &'.format(consumer[3] , process_id))
                         jobs.append(process_id)

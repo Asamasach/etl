@@ -86,7 +86,7 @@ class Mysql:
             consumer_name = '%',
             auto_offset_reset = '%',
             process_number = '%',
-            consumer_en = '1'
+            consumer_en = '%'
             ):
 
         connected = self.connect_mysql() 
