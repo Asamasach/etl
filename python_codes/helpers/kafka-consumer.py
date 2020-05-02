@@ -23,7 +23,7 @@ def main():
                     auto_offset_reset = auto_offset_reset,
                     kafka_id = process_number
                 )
-    f = open("/tmp/{}-pid.txt".format(process_number), "w")
+    f = open("/tmp/{}-{}-pid.txt".format(consumer_id ,process_number), "w")
     f.write(str(os.getpid()))
     print(os.getpid())
     f.close()

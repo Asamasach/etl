@@ -28,6 +28,7 @@ class Kafka():
                     'auto.offset.reset': self.auto_offset_reset
                     })
         self.c.subscribe([self.topic_name])
+        self.batch_size = float(self.conf['batch_size'])
         print(self.c.list_topics())
         print("{}th kafka_object has created!".format(self.kafka_id))
     def consume(self, index, consumer_id):
@@ -39,7 +40,7 @@ class Kafka():
         self.old_consumer_record = self.mysql.get_list(consumer_id = self.consumer_id)
         while self.running_consumer:
             
-            msg = self.c.poll(1.0)
+            msg = self.c.poll(self.batch_size)
 
             if msg is None:
                 a+=1
